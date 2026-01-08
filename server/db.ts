@@ -186,8 +186,11 @@ export async function deleteColaborador(id: number) {
 export async function createTipoEpi(data: InsertTipoEpi) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
-  const result = await db.insert(tiposEpi).values(data);
-  return result;
+  const result: any = await db.insert(tiposEpi).values(data);
+  const insertId = Number(result[0]?.insertId || result.insertId);
+  const created = await getTipoEpiById(insertId);
+  if (!created) throw new Error("Failed to retrieve created tipo EPI");
+  return created;
 }
 
 export async function getTiposEpi() {
@@ -219,8 +222,11 @@ export async function deleteTipoEpi(id: number) {
 export async function createEpi(data: InsertEpi) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
-  const result = await db.insert(epis).values(data);
-  return result;
+  const result: any = await db.insert(epis).values(data);
+  const insertId = Number(result[0]?.insertId || result.insertId);
+  const created = await getEpiById(insertId);
+  if (!created) throw new Error("Failed to retrieve created EPI");
+  return created;
 }
 
 export async function getEpis(status?: string) {
@@ -256,6 +262,34 @@ export async function deleteEpi(id: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   return await db.delete(epis).where(eq(epis.id, id));
+}
+
+export async function generateSku(): Promise<string> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Obter o último SKU gerado
+  const lastEpi = await db.select().from(epis).orderBy(desc(epis.id)).limit(1);
+  
+  let nextNumber = 1;
+  if (lastEpi.length > 0 && lastEpi[0]?.sku) {
+    // Extrair número do último SKU (formato: EPI-YYYY-NNNNN)
+    const match = lastEpi[0].sku.match(/EPI-(\d{4})-(\d{5})/);
+    if (match) {
+      const year = parseInt(match[1]);
+      const num = parseInt(match[2]);
+      const currentYear = new Date().getFullYear();
+      
+      if (year === currentYear) {
+        nextNumber = num + 1;
+      }
+    }
+  }
+  
+  const year = new Date().getFullYear();
+  const sku = `EPI-${year}-${String(nextNumber).padStart(5, '0')}`;
+  
+  return sku;
 }
 
 export async function getEpisVencidos() {

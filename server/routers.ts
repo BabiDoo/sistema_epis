@@ -230,6 +230,45 @@ export const appRouter = router({
       .query(async ({ input }) => {
         return await db.getEpiBySku(input.sku);
       }),
+    createBatch: protectedProcedure
+      .input(
+        z.object({
+          tipoEpiId: z.number(),
+          dataCompra: z.date(),
+          periodoVencimentoMeses: z.number(),
+          quantidade: z.number().min(1),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "almoxarife") {
+          throw new TRPCError({ code: "FORBIDDEN", message: "Acesso negado" });
+        }
+        
+        const { tipoEpiId, dataCompra, periodoVencimentoMeses, quantidade } = input;
+        
+        // Calcular data de validade
+        const dataValidade = new Date(dataCompra);
+        dataValidade.setMonth(dataValidade.getMonth() + periodoVencimentoMeses);
+        
+        // Gerar SKUs e criar EPIs em lote
+        const episCriados = [];
+        for (let i = 0; i < quantidade; i++) {
+          const sku = await db.generateSku();
+          const epi = await db.createEpi({
+            tipoEpiId,
+            sku,
+            dataCompra,
+            dataValidade,
+            status: "disponivel",
+          });
+          episCriados.push(epi);
+        }
+        
+        return {
+          quantidade: episCriados.length,
+          epis: episCriados,
+        };
+      }),
     create: protectedProcedure
       .input(
         z.object({

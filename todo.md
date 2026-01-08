@@ -103,3 +103,25 @@
 - [x] Adicionar campo 'telefone' na tabela colaboradores
 - [x] Adicionar campo 'cpf' na tabela colaboradores
 - [x] Adicionar campo 'email' na tabela colaboradores
+
+
+## 16. Cadastro de EPIs com Geração Automática de SKU
+- [x] Formulário de cadastro de EPI com tipo, data de compra, período de vencimento
+- [x] Campo de quantidade comprada
+- [x] Geração automática de SKU único para cada unidade (ex: EPI-2024-00001)
+- [x] Criar múltiplos EPIs individuais ao finalizar cadastro
+- [x] Cada EPI individual com mesmo tipo, data de compra e vencimento
+- [x] Status inicial "Disponível" para todos os EPIs criados
+- [x] Cálculo automático de data de vencimento baseado no período
+
+## 17. Gestão de Tipos de EPI
+- [x] CRUD de tipos de EPI (capacete, luva, bota, etc.)
+- [x] Campos: nome, categoria, CA (Certificado de Aprovação), fabricante
+- [x] Orientações de uso e vida útil padrão
+
+## 18. Listagem e Gestão de EPIs Individuais
+- [x] Tabela de EPIs com SKU, tipo, status, data de compra, vencimento
+- [x] Busca por SKU, tipo, status
+- [x] Filtros por status (Disponível, Em Uso, Vencido, Descartado)
+- [ ] Visualização detalhada de cada EPI individual
+- [ ] Histórico de movimentações por SKU
