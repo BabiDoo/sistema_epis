@@ -125,3 +125,38 @@
 - [x] Filtros por status (Disponível, Em Uso, Vencido, Descartado)
 - [ ] Visualização detalhada de cada EPI individual
 - [ ] Histórico de movimentações por SKU
+
+
+## 19. Sistema de Ficha de EPI com Movimentações
+- [x] Interface de ficha de EPI para colaboradores
+- [x] Tipos de movimentação: Substituição, Entrega, Empréstimo, Perda, Dano
+- [x] Seleção de EPI por SKU
+- [x] Campo de data da movimentação
+- [x] Campo de motivo/observações
+- [x] Componente de assinatura digital via canvas touch
+- [x] Salvar assinatura como imagem (base64)
+- [x] Armazenar movimentação completa no banco de dados
+
+## 20. Atualização Automática de Status dos EPIs
+- [x] Entrega/Empréstimo: atualizar status para "Em Uso"
+- [x] Devolução: atualizar status para "Disponível"
+- [x] Perda/Dano: atualizar status para "Descartado"
+- [x] Vincular EPI ao colaborador na movimentação
+- [x] Desvincular EPI do colaborador na devolução
+
+## 21. Prontuário Digital do Colaborador
+- [x] Visualização de dados cadastrais do colaborador
+- [x] Listagem de EPIs atualmente em uso
+- [x] Histórico completo de movimentações
+- [x] Exibição de assinaturas digitais
+- [ ] Filtros por período e tipo de movimentação
+
+## 22. Geração de Laudos em PDF
+- [ ] Exportar prontuário completo em PDF
+- [ ] Incluir dados do colaborador
+- [ ] Incluir todas as movimentações com datas
+- [ ] Incluir assinaturas digitais nas movimentações
+- [ ] Relatório de movimentações por período para administradores
+- [ ] Exportar lista de EPIs por colaborador em PDF
+
+Obs: Interface preparada com botão de exportação, implementação da geração de PDF será feita na próxima etapa

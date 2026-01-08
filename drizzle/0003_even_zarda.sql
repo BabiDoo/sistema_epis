@@ -1,0 +1,1 @@
+ALTER TABLE `movimentacoes` MODIFY COLUMN `tipo` enum('entrega','emprestimo','devolucao','substituicao','perda','dano') NOT NULL;

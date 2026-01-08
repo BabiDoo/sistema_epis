@@ -117,8 +117,12 @@ export async function getUserByOpenId(openId: string) {
 export async function createEmpresa(data: InsertEmpresa) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
-  const result = await db.insert(empresas).values(data);
-  return result;
+  const result: any = await db.insert(empresas).values(data);
+  const insertId = result.insertId || result[0]?.insertId;
+  if (!insertId) throw new Error("Failed to create empresa");
+  const created = await getEmpresaById(insertId);
+  if (!created) throw new Error("Failed to retrieve created empresa");
+  return created;
 }
 
 export async function getEmpresas() {

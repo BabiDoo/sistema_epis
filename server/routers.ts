@@ -351,7 +351,7 @@ export const appRouter = router({
         z.object({
           epiId: z.number(),
           colaboradorId: z.number(),
-          tipo: z.enum(["emprestimo", "troca", "devolucao"]),
+          tipo: z.enum(["entrega", "emprestimo", "devolucao", "substituicao", "perda", "dano"]),
           motivo: z.string().optional(),
           dataMovimentacao: z.date().optional(),
           assinaturaUrl: z.string().optional(),
@@ -362,10 +362,30 @@ export const appRouter = router({
         if (ctx.user.role !== "admin" && ctx.user.role !== "almoxarife") {
           throw new TRPCError({ code: "FORBIDDEN", message: "Acesso negado" });
         }
-        return await db.createMovimentacao({
+        
+        // Criar movimentação
+        const movimentacao = await db.createMovimentacao({
           ...input,
           usuarioResponsavelId: ctx.user.id,
         });
+        
+        // Atualizar status do EPI baseado no tipo de movimentação
+        const { tipo, epiId } = input;
+        let novoStatus: "disponivel" | "em_uso" | "vencido" | "descartado" | undefined;
+        
+        if (tipo === "entrega" || tipo === "emprestimo" || tipo === "substituicao") {
+          novoStatus = "em_uso";
+        } else if (tipo === "devolucao") {
+          novoStatus = "disponivel";
+        } else if (tipo === "perda" || tipo === "dano") {
+          novoStatus = "descartado";
+        }
+        
+        if (novoStatus) {
+          await db.updateEpi(epiId, { status: novoStatus });
+        }
+        
+        return movimentacao;
       }),
   }),
 

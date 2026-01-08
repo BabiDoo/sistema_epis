@@ -98,7 +98,7 @@ export const movimentacoes = mysqlTable("movimentacoes", {
   id: int("id").autoincrement().primaryKey(),
   epiId: int("epiId").notNull(),
   colaboradorId: int("colaboradorId").notNull(),
-  tipo: mysqlEnum("tipo", ["emprestimo", "troca", "devolucao"]).notNull(),
+  tipo: mysqlEnum("tipo", ["entrega", "emprestimo", "devolucao", "substituicao", "perda", "dano"]).notNull(),
   motivo: text("motivo"),
   dataMovimentacao: timestamp("dataMovimentacao").defaultNow().notNull(),
   usuarioResponsavelId: int("usuarioResponsavelId").notNull(),
