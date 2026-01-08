@@ -13,11 +13,13 @@ import Epis from "./pages/Epis";
 import Movimentacoes from "./pages/Movimentacoes";
 import AvaliacoesCampo from "./pages/AvaliacoesCampo";
 import Prontuario from "./pages/Prontuario";
+import Onboarding from "./pages/Onboarding";
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path={"/onboarding"} component={Onboarding} />
       <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/empresas"} component={Empresas} />
       <Route path={"/colaboradores"} component={Colaboradores} />

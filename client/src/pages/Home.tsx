@@ -35,7 +35,7 @@ export default function Home() {
             </div>
           </div>
           <Button asChild>
-            <a href={getLoginUrl()}>Entrar no Sistema</a>
+            <a href={getLoginUrl("/onboarding")}>Entrar no Sistema</a>
           </Button>
         </div>
       </header>
@@ -55,7 +55,7 @@ export default function Home() {
           </p>
           <div className="flex gap-4 justify-center pt-4">
             <Button size="lg" asChild>
-              <a href={getLoginUrl()}>Começar Agora</a>
+              <a href={getLoginUrl("/onboarding")}>Começar Agora</a>
             </Button>
             <Button size="lg" variant="outline" asChild>
               <a href="#recursos">Conhecer Recursos</a>
@@ -146,7 +146,7 @@ export default function Home() {
             Acesse o sistema e comece a gerenciar seus equipamentos de proteção individual com segurança e conformidade legal.
           </p>
           <Button size="lg" asChild>
-            <a href={getLoginUrl()}>Acessar Sistema</a>
+            <a href={getLoginUrl("/onboarding")}>Acessar Sistema</a>
           </Button>
         </div>
       </section>

@@ -73,3 +73,33 @@
 - [x] Navegação por perfil de acesso
 - [ ] Responsividade mobile
 - [x] Estados de loading e erro
+
+
+## 12. Fluxo de Onboarding e Cadastro Inicial
+- [x] Página de cadastro inicial da empresa após landing page
+- [x] Formulário com razão social, CNPJ, segmento, endereço completo
+- [ ] Validação de CNPJ
+- [x] Redirecionamento automático para dashboard após cadastro
+
+## 13. Gestão Completa de Colaboradores
+- [x] Upload de foto do colaborador (base64)
+- [x] Campos completos: nome, CPF, telefone, email, função, setor
+- [x] Data de admissão e demissão
+- [ ] Validação de CPF
+- [x] Tabela com busca e filtros
+- [x] Formulário de criação e edição
+- [x] Visualização detalhada do colaborador
+
+## 14. Sistema de Convite e Acesso para Colaboradores
+- [ ] Gerar convite de acesso ao cadastrar colaborador
+- [ ] Enviar link de acesso por email
+- [ ] Colaborador cria senha no primeiro acesso
+- [ ] Vinculação automática do usuário ao colaborador
+- [ ] Permissões de acesso para gestão de EPIs e avaliações
+
+## 15. Melhorias no Schema do Banco
+- [x] Adicionar campo 'segmento' na tabela empresas
+- [x] Adicionar campo 'fotoUrl' na tabela colaboradores
+- [x] Adicionar campo 'telefone' na tabela colaboradores
+- [x] Adicionar campo 'cpf' na tabela colaboradores
+- [x] Adicionar campo 'email' na tabela colaboradores
