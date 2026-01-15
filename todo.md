@@ -160,3 +160,17 @@
 - [ ] Exportar lista de EPIs por colaborador em PDF
 
 Obs: Interface preparada com botão de exportação, implementação da geração de PDF será feita na próxima etapa
+
+
+## 23. Módulo de Avaliações de Campo
+- [x] Atualizar schema com campos necessários para avaliações
+- [x] Cadastro de avaliações de campo por setor
+- [x] Identificação de riscos por categoria (Físicos, Químicos, Biológicos, Ergonômicos, Acidentes)
+- [x] Campo de observações técnicas detalhadas
+- [x] Recomendações de EPIs necessários
+- [x] Medidas de controle sugeridas
+- [x] Status da avaliação (Pendente, Em Andamento, Concluída)
+- [x] Listagem de avaliações com filtros por setor, data, status
+- [x] Visualização detalhada de cada avaliação
+- [x] Histórico completo de avaliações por setor
+- [x] Controle de acesso (apenas técnicos de segurança e admin)

@@ -114,10 +114,18 @@ export type InsertMovimentacao = typeof movimentacoes.$inferInsert;
 export const avaliacoesCampo = mysqlTable("avaliacoesCampo", {
   id: int("id").autoincrement().primaryKey(),
   empresaId: int("empresaId").notNull(),
-  local: varchar("local", { length: 255 }).notNull(),
+  setor: varchar("setor", { length: 255 }).notNull(),
   dataAvaliacao: timestamp("dataAvaliacao").notNull(),
   tecnicoResponsavelId: int("tecnicoResponsavelId").notNull(),
-  observacoesGerais: text("observacoesGerais"),
+  status: mysqlEnum("status", ["pendente", "em_andamento", "concluida"]).default("pendente").notNull(),
+  riscosFisicos: text("riscosFisicos"),
+  riscosQuimicos: text("riscosQuimicos"),
+  riscosBiologicos: text("riscosBiologicos"),
+  riscosErgonomicos: text("riscosErgonomicos"),
+  riscosAcidentes: text("riscosAcidentes"),
+  observacoesTecnicas: text("observacoesTecnicas"),
+  episRecomendados: text("episRecomendados"),
+  medidasControle: text("medidasControle"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -125,19 +133,3 @@ export const avaliacoesCampo = mysqlTable("avaliacoesCampo", {
 export type AvaliacaoCampo = typeof avaliacoesCampo.$inferSelect;
 export type InsertAvaliacaoCampo = typeof avaliacoesCampo.$inferInsert;
 
-// Tabela de Setores Avaliados
-export const setoresAvaliados = mysqlTable("setoresAvaliados", {
-  id: int("id").autoincrement().primaryKey(),
-  avaliacaoCampoId: int("avaliacaoCampoId").notNull(),
-  nomeSetor: varchar("nomeSetor", { length: 255 }).notNull(),
-  funcoesCargos: text("funcoesCargos").notNull(),
-  nomeServidor: varchar("nomeServidor", { length: 255 }),
-  riscosFisicos: text("riscosFisicos"),
-  riscosQuimicos: text("riscosQuimicos"),
-  riscosBiologicos: text("riscosBiologicos"),
-  observacoes: text("observacoes"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
-
-export type SetorAvaliado = typeof setoresAvaliados.$inferSelect;
-export type InsertSetorAvaliado = typeof setoresAvaliados.$inferInsert;

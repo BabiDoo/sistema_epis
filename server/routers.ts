@@ -272,18 +272,26 @@ export const appRouter = router({
     create: protectedProcedure
       .input(
         z.object({
-          tipoEpiId: z.number(),
-          sku: z.string(),
-          dataCompra: z.date(),
-          dataValidade: z.date(),
-          status: z.enum(["disponivel", "em_uso", "vencido", "descartado"]).optional(),
+          empresaId: z.number(),
+          setor: z.string(),
+          dataAvaliacao: z.date(),
+          tecnicoResponsavelId: z.number(),
+          status: z.enum(["pendente", "em_andamento", "concluida"]).optional(),
+          riscosFisicos: z.string().optional(),
+          riscosQuimicos: z.string().optional(),
+          riscosBiologicos: z.string().optional(),
+          riscosErgonomicos: z.string().optional(),
+          riscosAcidentes: z.string().optional(),
+          observacoesTecnicas: z.string().optional(),
+          episRecomendados: z.string().optional(),
+          medidasControle: z.string().optional(),
         })
       )
       .mutation(async ({ input, ctx }) => {
-        if (ctx.user.role !== "admin" && ctx.user.role !== "almoxarife") {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "tecnico_seguranca") {
           throw new TRPCError({ code: "FORBIDDEN", message: "Acesso negado" });
         }
-        return await db.createEpi(input);
+        return await db.createAvaliacaoCampo(input);
       }),
     update: protectedProcedure
       .input(
@@ -404,28 +412,42 @@ export const appRouter = router({
       .input(
         z.object({
           empresaId: z.number(),
-          local: z.string(),
+          setor: z.string(),
           dataAvaliacao: z.date(),
-          observacoesGerais: z.string().optional(),
+          tecnicoResponsavelId: z.number(),
+          status: z.enum(["pendente", "em_andamento", "concluida"]).optional(),
+          riscosFisicos: z.string().optional(),
+          riscosQuimicos: z.string().optional(),
+          riscosBiologicos: z.string().optional(),
+          riscosErgonomicos: z.string().optional(),
+          riscosAcidentes: z.string().optional(),
+          observacoesTecnicas: z.string().optional(),
+          episRecomendados: z.string().optional(),
+          medidasControle: z.string().optional(),
         })
       )
       .mutation(async ({ input, ctx }) => {
         if (ctx.user.role !== "admin" && ctx.user.role !== "tecnico_seguranca") {
           throw new TRPCError({ code: "FORBIDDEN", message: "Acesso negado" });
         }
-        return await db.createAvaliacaoCampo({
-          ...input,
-          tecnicoResponsavelId: ctx.user.id,
-        });
+        return await db.createAvaliacaoCampo(input);
       }),
     update: protectedProcedure
       .input(
         z.object({
           id: z.number(),
           empresaId: z.number().optional(),
-          local: z.string().optional(),
+          setor: z.string().optional(),
           dataAvaliacao: z.date().optional(),
-          observacoesGerais: z.string().optional(),
+          status: z.enum(["pendente", "em_andamento", "concluida"]).optional(),
+          riscosFisicos: z.string().optional(),
+          riscosQuimicos: z.string().optional(),
+          riscosBiologicos: z.string().optional(),
+          riscosErgonomicos: z.string().optional(),
+          riscosAcidentes: z.string().optional(),
+          observacoesTecnicas: z.string().optional(),
+          episRecomendados: z.string().optional(),
+          medidasControle: z.string().optional(),
         })
       )
       .mutation(async ({ input, ctx }) => {
@@ -442,66 +464,6 @@ export const appRouter = router({
           throw new TRPCError({ code: "FORBIDDEN", message: "Acesso negado" });
         }
         return await db.deleteAvaliacaoCampo(input.id);
-      }),
-  }),
-
-  setoresAvaliados: router({
-    list: protectedProcedure
-      .input(z.object({ avaliacaoCampoId: z.number() }))
-      .query(async ({ input }) => {
-        return await db.getSetoresAvaliados(input.avaliacaoCampoId);
-      }),
-    getById: protectedProcedure
-      .input(z.object({ id: z.number() }))
-      .query(async ({ input }) => {
-        return await db.getSetorAvaliadoById(input.id);
-      }),
-    create: protectedProcedure
-      .input(
-        z.object({
-          avaliacaoCampoId: z.number(),
-          nomeSetor: z.string(),
-          funcoesCargos: z.string(),
-          nomeServidor: z.string().optional(),
-          riscosFisicos: z.string().optional(),
-          riscosQuimicos: z.string().optional(),
-          riscosBiologicos: z.string().optional(),
-          observacoes: z.string().optional(),
-        })
-      )
-      .mutation(async ({ input, ctx }) => {
-        if (ctx.user.role !== "admin" && ctx.user.role !== "tecnico_seguranca") {
-          throw new TRPCError({ code: "FORBIDDEN", message: "Acesso negado" });
-        }
-        return await db.createSetorAvaliado(input);
-      }),
-    update: protectedProcedure
-      .input(
-        z.object({
-          id: z.number(),
-          nomeSetor: z.string().optional(),
-          funcoesCargos: z.string().optional(),
-          nomeServidor: z.string().optional(),
-          riscosFisicos: z.string().optional(),
-          riscosQuimicos: z.string().optional(),
-          riscosBiologicos: z.string().optional(),
-          observacoes: z.string().optional(),
-        })
-      )
-      .mutation(async ({ input, ctx }) => {
-        if (ctx.user.role !== "admin" && ctx.user.role !== "tecnico_seguranca") {
-          throw new TRPCError({ code: "FORBIDDEN", message: "Acesso negado" });
-        }
-        const { id, ...data } = input;
-        return await db.updateSetorAvaliado(id, data);
-      }),
-    delete: protectedProcedure
-      .input(z.object({ id: z.number() }))
-      .mutation(async ({ input, ctx }) => {
-        if (ctx.user.role !== "admin") {
-          throw new TRPCError({ code: "FORBIDDEN", message: "Acesso negado" });
-        }
-        return await db.deleteSetorAvaliado(input.id);
       }),
   }),
 

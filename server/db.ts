@@ -9,7 +9,6 @@ import {
   epis,
   movimentacoes,
   avaliacoesCampo,
-  setoresAvaliados,
   type Empresa,
   type InsertEmpresa,
   type Colaborador,
@@ -22,8 +21,6 @@ import {
   type InsertMovimentacao,
   type AvaliacaoCampo,
   type InsertAvaliacaoCampo,
-  type SetorAvaliado,
-  type InsertSetorAvaliado,
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -384,39 +381,6 @@ export async function deleteAvaliacaoCampo(id: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   return await db.delete(avaliacoesCampo).where(eq(avaliacoesCampo.id, id));
-}
-
-// ===== SETORES AVALIADOS =====
-export async function createSetorAvaliado(data: InsertSetorAvaliado) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  const result = await db.insert(setoresAvaliados).values(data);
-  return result;
-}
-
-export async function getSetoresAvaliados(avaliacaoCampoId: number) {
-  const db = await getDb();
-  if (!db) return [];
-  return await db.select().from(setoresAvaliados).where(eq(setoresAvaliados.avaliacaoCampoId, avaliacaoCampoId)).orderBy(desc(setoresAvaliados.createdAt));
-}
-
-export async function getSetorAvaliadoById(id: number) {
-  const db = await getDb();
-  if (!db) return undefined;
-  const result = await db.select().from(setoresAvaliados).where(eq(setoresAvaliados.id, id)).limit(1);
-  return result[0];
-}
-
-export async function updateSetorAvaliado(id: number, data: Partial<InsertSetorAvaliado>) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  return await db.update(setoresAvaliados).set(data).where(eq(setoresAvaliados.id, id));
-}
-
-export async function deleteSetorAvaliado(id: number) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  return await db.delete(setoresAvaliados).where(eq(setoresAvaliados.id, id));
 }
 
 // ===== DASHBOARD & STATS =====
