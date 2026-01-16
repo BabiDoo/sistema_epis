@@ -188,3 +188,14 @@ Obs: Interface preparada com botão de exportação, implementação da geraçã
 - [x] Relatório de sucesso/erro com detalhes
 - [x] Tratamento de erros com mensagens claras
 - [x] Testes unitários para importação em massa
+
+
+## BUG REPORT
+
+### Dashboard não aparece para usuários logados
+- [x] Usuário vê apenas prontuário em vez do dashboard administrativo
+- [x] Problema na lógica de roteamento por perfil de usuário
+- [x] Dashboard.tsx não está sendo renderizado corretamente
+- [x] Necessário corrigir App.tsx e lógica de navegação por perfil
+
+Correcao: Adicionado import de useAuth no Dashboard.tsx
