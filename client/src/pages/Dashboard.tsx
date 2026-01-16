@@ -141,21 +141,18 @@ function DashboardHeader({ user }: { user: any }) {
             <Button variant="ghost" asChild>
               <Link href="/dashboard">Dashboard</Link>
             </Button>
-            {(user.role === "admin" || user.role === "almoxarife") && (
-              <>
-                <Button variant="ghost" asChild>
-                  <Link href="/epis">EPIs</Link>
-                </Button>
-                <Button variant="ghost" asChild>
-                  <Link href="/colaboradores">Colaboradores</Link>
-                </Button>
-              </>
-            )}
-            {(user.role === "admin" || user.role === "tecnico_seguranca") && (
-              <Button variant="ghost" asChild>
-                <Link href="/avaliacoes-campo">Avaliações</Link>
-              </Button>
-            )}
+            <Button variant="ghost" asChild>
+              <Link href="/epis">EPIs</Link>
+            </Button>
+            <Button variant="ghost" asChild>
+              <Link href="/colaboradores">Colaboradores</Link>
+            </Button>
+            <Button variant="ghost" asChild>
+              <Link href="/movimentacoes">Movimentações</Link>
+            </Button>
+            <Button variant="ghost" asChild>
+              <Link href="/avaliacoes-campo">Avaliações</Link>
+            </Button>
             {user.colaboradorId && (
               <Button variant="ghost" asChild>
                 <Link href={`/prontuario/${user.colaboradorId}`}>Meu Prontuário</Link>

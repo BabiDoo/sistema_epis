@@ -206,3 +206,11 @@ Correcao: Adicionado import de useAuth no Dashboard.tsx
 - [x] Remover lógica que redireciona colaborador para prontuário
 - [x] Adicionar link para prontuário no menu de navegação
 - [x] Todos os perfis devem ver dashboard completo com EPIs, colaboradores, etc.
+
+
+### Navbar com todas as funcionalidades visíveis
+- [x] Mostrar EPIs no navbar para todos os usuários
+- [x] Mostrar Colaboradores no navbar para todos os usuários
+- [x] Mostrar Avaliações no navbar para todos os usuários
+- [x] Mostrar Movimentações no navbar para todos os usuários
+- [x] Remover restrições de exibição dos links (controle de acesso permanece no backend)
