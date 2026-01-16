@@ -174,3 +174,17 @@ Obs: Interface preparada com botão de exportação, implementação da geraçã
 - [x] Visualização detalhada de cada avaliação
 - [x] Histórico completo de avaliações por setor
 - [x] Controle de acesso (apenas técnicos de segurança e admin)
+
+
+## 24. Importação em Massa de Colaboradores via CSV
+- [x] Endpoint de importação em lote (tRPC procedure)
+- [x] Parser de CSV com suporte a colunas: Nome, CPF, Telefone, Email, Função, Setor, Data de Admissão
+- [x] Validação de dados antes de importar
+- [x] Verificação de CPF duplicado
+- [x] Componente de upload de arquivo CSV
+- [x] Preview dos dados a serem importados
+- [x] Opção de revisar e confirmar importação
+- [x] Importação em lote no banco de dados
+- [x] Relatório de sucesso/erro com detalhes
+- [x] Tratamento de erros com mensagens claras
+- [x] Testes unitários para importação em massa

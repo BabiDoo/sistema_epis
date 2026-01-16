@@ -23,6 +23,7 @@ import { trpc } from "@/lib/trpc";
 import { Loader2, Pencil, Plus, Search, Trash2, Upload, User, Users } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import ImportarColaboradoresCSV from "@/components/ImportarColaboradoresCSV";
 
 type ColaboradorForm = {
   id?: number;
@@ -206,10 +207,16 @@ export default function Colaboradores() {
                 </CardTitle>
                 <CardDescription>Cadastre e gerencie colaboradores da empresa</CardDescription>
               </div>
-              <Button onClick={() => handleOpenDialog()}>
-                <Plus className="mr-2 h-4 w-4" />
-                Novo Colaborador
-              </Button>
+              <div className="flex gap-2">
+                <ImportarColaboradoresCSV 
+                  empresaId={empresas?.[0]?.id || 1} 
+                  onSuccess={() => refetch()}
+                />
+                <Button onClick={() => handleOpenDialog()}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Novo Colaborador
+                </Button>
+              </div>
             </div>
           </CardHeader>
           <CardContent>

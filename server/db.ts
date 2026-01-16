@@ -402,3 +402,79 @@ export async function getDashboardStats() {
     totalColaboradores: totalColaboradores?.count || 0,
   };
 }
+
+
+// ===== IMPORTAÇÃO EM LOTE =====
+export async function importarColaboradoresCSV(
+  empresaId: number,
+  colabList: Array<{
+    nome: string;
+    cpf: string;
+    telefone?: string;
+    email?: string;
+    funcao?: string;
+    setor?: string;
+    dataAdmissao?: Date;
+  }>
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const results = {
+    sucesso: 0,
+    erro: 0,
+    detalhes: [] as Array<{ nome: string; cpf: string; status: string; mensagem?: string }>,
+  };
+
+  for (const colab of colabList) {
+    try {
+      // Validar CPF duplicado
+      const existente = await db
+        .select()
+        .from(colaboradores)
+        .where(eq(colaboradores.cpf, colab.cpf))
+        .limit(1);
+
+      if (existente.length > 0) {
+        results.erro++;
+        results.detalhes.push({
+          nome: colab.nome,
+          cpf: colab.cpf,
+          status: "erro",
+          mensagem: "CPF já cadastrado no sistema",
+        });
+        continue;
+      }
+
+      // Criar colaborador
+      await db.insert(colaboradores).values({
+        empresaId: empresaId,
+        nome: colab.nome,
+        cpf: colab.cpf,
+        telefone: colab.telefone || "",
+        email: colab.email || "",
+        funcao: colab.funcao || "Sem função",
+        setor: colab.setor || "Sem setor",
+        dataAdmissao: colab.dataAdmissao || new Date(),
+        status: "ativo",
+      })
+
+      results.sucesso++;
+      results.detalhes.push({
+        nome: colab.nome,
+        cpf: colab.cpf,
+        status: "sucesso",
+      });
+    } catch (error) {
+      results.erro++;
+      results.detalhes.push({
+        nome: colab.nome,
+        cpf: colab.cpf,
+        status: "erro",
+        mensagem: error instanceof Error ? error.message : "Erro desconhecido",
+      });
+    }
+  }
+
+  return results;
+}

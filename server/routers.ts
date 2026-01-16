@@ -155,6 +155,29 @@ export const appRouter = router({
         }
         return await db.deleteColaborador(input.id);
       }),
+    importarCSV: protectedProcedure
+      .input(
+        z.object({
+          empresaId: z.number(),
+          colaboradores: z.array(
+            z.object({
+              nome: z.string(),
+              cpf: z.string(),
+              telefone: z.string().optional(),
+              email: z.string().optional(),
+              funcao: z.string().optional(),
+              setor: z.string().optional(),
+              dataAdmissao: z.date().optional(),
+            })
+          ),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "almoxarife") {
+          throw new TRPCError({ code: "FORBIDDEN", message: "Acesso negado" });
+        }
+        return await db.importarColaboradoresCSV(input.empresaId, input.colaboradores);
+      }),
   }),
 
   tiposEpi: router({
