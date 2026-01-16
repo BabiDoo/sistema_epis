@@ -199,3 +199,10 @@ Obs: Interface preparada com botão de exportação, implementação da geraçã
 - [x] Necessário corrigir App.tsx e lógica de navegação por perfil
 
 Correcao: Adicionado import de useAuth no Dashboard.tsx
+
+
+### Dashboard mostra apenas prontuário para colaboradores
+- [x] Modificar Dashboard.tsx para exibir estatísticas para todos os perfis
+- [x] Remover lógica que redireciona colaborador para prontuário
+- [x] Adicionar link para prontuário no menu de navegação
+- [x] Todos os perfis devem ver dashboard completo com EPIs, colaboradores, etc.

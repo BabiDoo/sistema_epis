@@ -38,30 +38,6 @@ export default function Dashboard() {
     );
   }
 
-  if (user.role === "colaborador") {
-    return (
-      <div className="min-h-screen bg-background">
-        <DashboardHeader user={user} />
-        <div className="container mx-auto px-6 py-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Bem-vindo, {user.name}</CardTitle>
-              <CardDescription>Acesse seu prontuário digital para visualizar seus EPIs</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button asChild>
-                <Link href={`/prontuario/${user.colaboradorId}`}>
-                  <Shield className="mr-2 h-4 w-4" />
-                  Ver Meu Prontuário
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-background">
       <DashboardHeader user={user} />
@@ -178,6 +154,11 @@ function DashboardHeader({ user }: { user: any }) {
             {(user.role === "admin" || user.role === "tecnico_seguranca") && (
               <Button variant="ghost" asChild>
                 <Link href="/avaliacoes-campo">Avaliações</Link>
+              </Button>
+            )}
+            {user.colaboradorId && (
+              <Button variant="ghost" asChild>
+                <Link href={`/prontuario/${user.colaboradorId}`}>Meu Prontuário</Link>
               </Button>
             )}
           </nav>
