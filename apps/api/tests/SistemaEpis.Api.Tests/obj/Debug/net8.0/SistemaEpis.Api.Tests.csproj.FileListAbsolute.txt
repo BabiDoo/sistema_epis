@@ -160,3 +160,4 @@ C:\Users\barba\Downloads\sistema_epis\apps\api\tests\SistemaEpis.Api.Tests\bin\D
 C:\Users\barba\Downloads\sistema_epis\apps\api\tests\SistemaEpis.Api.Tests\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\barba\Downloads\sistema_epis\apps\api\tests\SistemaEpis.Api.Tests\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
 C:\Users\barba\Downloads\sistema_epis\apps\api\tests\SistemaEpis.Api.Tests\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\barba\Downloads\sistema_epis\apps\api\tests\SistemaEpis.Api.Tests\bin\Debug\net8.0\BCrypt.Net-Next.dll

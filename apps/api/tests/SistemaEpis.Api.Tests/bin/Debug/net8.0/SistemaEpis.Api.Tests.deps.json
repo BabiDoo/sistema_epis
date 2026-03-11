@@ -30,6 +30,14 @@
           }
         }
       },
+      "BCrypt.Net-Next/4.1.0": {
+        "runtime": {
+          "lib/netstandard2.1/BCrypt.Net-Next.dll": {
+            "assemblyVersion": "4.1.0.0",
+            "fileVersion": "4.1.0.0"
+          }
+        }
+      },
       "coverlet.collector/6.0.0": {},
       "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.8": {
         "dependencies": {
@@ -1607,6 +1615,7 @@
       },
       "SistemaEpis.Infrastructure/1.0.0": {
         "dependencies": {
+          "BCrypt.Net-Next": "4.1.0",
           "Microsoft.EntityFrameworkCore": "8.0.8",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "8.0.8",
           "Serilog.AspNetCore": "10.0.0",
@@ -1637,6 +1646,13 @@
       "sha512": "sha512-npc58/AD5zuVxERdhCl2Kb7WnL37mwX42SJcXIwvmEig0/dugOLg3SIwtfvvh3TnvTwR/sk5LYNkkPaBdks61A==",
       "path": "aspnetcore.healthchecks.npgsql/9.0.0",
       "hashPath": "aspnetcore.healthchecks.npgsql.9.0.0.nupkg.sha512"
+    },
+    "BCrypt.Net-Next/4.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5YT3DKllmtkyW68PjURu/V1TOe4MKiByKwsRNVcfYE1S5KuFTeozdmKzyNzolKiQF391OXCaQtINvYT3j1ERzQ==",
+      "path": "bcrypt.net-next/4.1.0",
+      "hashPath": "bcrypt.net-next.4.1.0.nupkg.sha512"
     },
     "coverlet.collector/6.0.0": {
       "type": "package",

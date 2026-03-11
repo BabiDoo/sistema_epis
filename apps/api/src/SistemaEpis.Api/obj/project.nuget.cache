@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "ZAFZrkrNWGY=",
+  "dgSpecHash": "IchIt8tShYc=",
   "success": true,
   "projectFilePath": "C:\\Users\\barba\\Downloads\\sistema_epis\\apps\\api\\src\\SistemaEpis.Api\\SistemaEpis.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\barba\\.nuget\\packages\\aspnetcore.healthchecks.npgsql\\9.0.0\\aspnetcore.healthchecks.npgsql.9.0.0.nupkg.sha512",
+    "C:\\Users\\barba\\.nuget\\packages\\bcrypt.net-next\\4.1.0\\bcrypt.net-next.4.1.0.nupkg.sha512",
     "C:\\Users\\barba\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\barba\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.8\\microsoft.aspnetcore.authentication.jwtbearer.8.0.8.nupkg.sha512",
     "C:\\Users\\barba\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.25\\microsoft.aspnetcore.openapi.8.0.25.nupkg.sha512",
