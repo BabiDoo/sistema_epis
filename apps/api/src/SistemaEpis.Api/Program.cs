@@ -106,8 +106,15 @@ app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwagger(options => 
+    {
+        options.RouteTemplate = "docs/{documentName}/swagger.json";
+    });
+    app.UseSwaggerUI(options => 
+    {
+        options.RoutePrefix = "docs";
+        options.SwaggerEndpoint("/docs/v1/swagger.json", "Sistema EPIs API v1");
+    });
 }
 
 app.UseAuthentication();

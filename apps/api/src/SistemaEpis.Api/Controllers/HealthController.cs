@@ -24,4 +24,22 @@ public class HealthController : ControllerBase
             role = User.Claims.FirstOrDefault(c => c.Type.Contains("role"))?.Value
         });
     }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet("somente-admin")]
+    public IActionResult SomenteAdmin()
+    {
+        return Ok(new
+        {
+            message = "Endpoint exclusivo para administradores funcionando.",
+            user = User.Identity?.Name,
+            role = User.Claims.FirstOrDefault(c => c.Type.Contains("role"))?.Value
+        });
+    }
+
+    [HttpGet("erro")]
+    public IActionResult Erro()
+    {
+        throw new Exception("Erro proposital para teste.");
+    }
 }
