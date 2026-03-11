@@ -105,3 +105,32 @@ temp/
 *.db
 *.sqlite
 *.sqlite3
+
+# =========================
+# .NET / C# Framework
+# =========================
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Tt]est[Rr]esults/
+
+# IDE / User-specific files
+*.user
+*.userprefs
+*.suo
+*.sln.docstates
+*.RiderPreferences
+.vs/
+
+# Compiled files
+*.dll
+*.pdb
+*.exe
+*.cache
+*.nupkg
+
+# Configurations and Secrets
+appsettings.Development.json
+appsettings.*.Development.json
+appsettings.staging.json
+secrets.json
