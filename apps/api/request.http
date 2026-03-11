@@ -1,0 +1,32 @@
+@HostAddress = http://localhost:5204
+
+### 1. Health Check
+GET {{HostAddress}}/health
+Accept: application/json
+
+### 2. Login
+# @name login
+POST {{HostAddress}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@sistemaepis.com",
+    "senha": "123456"
+}
+
+### --- Captura do Token ---
+@token = {{login.response.body.$.token}}
+
+### 3. Teste Rota Protegida
+GET {{HostAddress}}/api/v1/teste/protegido
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### 4. Teste Rota Somente Admin
+GET {{HostAddress}}/api/v1/teste/somente-admin
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### 5. Teste Tratamento Global de Erro
+GET {{HostAddress}}/api/v1/teste/erro
+Accept: application/json
