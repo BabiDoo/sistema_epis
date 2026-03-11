@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "3syrzoX0uH0XDe3c7xkEEt7FYvRoatG6sP8VYjwcNIY=",
+  "Source": "SistemaEpis.Api",
+  "BasePath": "_content/SistemaEpis.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
