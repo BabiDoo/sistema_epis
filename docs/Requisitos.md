@@ -46,13 +46,14 @@ Módulo: Estrutura Organizacional Base
 - RF-05: O sistema deve permitir o cadastro de Áreas vinculadas às unidades.
 - RF-06: O sistema deve permitir o cadastro de Setores vinculados às áreas.
 - RF-07: O sistema deve permitir o cadastro de Cargos.
-- RF-08: O sistema deve permitir o cadastro de Colaboradores vinculados a unidade, área, setor e cargo.
+- RF-08: O sistema deve permitir o cadastro de Colaboradores vinculados a unidade, área, setor e cargo, garantindo a integridade hierárquica do vínculo.
 
 Módulo: Catálogo de EPIs
 - RF-09: O sistema deve permitir cadastrar categorias de EPI.
 - RF-10: O sistema deve permitir cadastrar EPIs com nome, fabricante, foto, CA e validade do CA.
 - RF-11: O sistema deve prever a durabilidade padrão (em dias) de cada EPI.
-- RF-12: O sistema deve permitir definir numeração/tamanho/cor do EPI.
+- RF-12: O sistema deve permitir definir numeração, tamanho, cor e outras características técnicas do EPI através de um modelo flexível de Atributos Técnicos (Chave/Valor).
+    - As chaves devem ser normalizadas e os valores são de preenchimento obrigatório.
 
 Módulo: Estoque
 - RF-13: O sistema deve manter o saldo físico por lote, associando quantidade a uma data de vencimento.
@@ -71,6 +72,7 @@ Para garantir a integridade do sistema, as seguintes regras são absolutas e dev
 - IN-03 (Rastreabilidade de Estoque): Não é possível alterar, remover ou adicionar saldo de estoque sem gerar um registro correspondente na tabela de movimentação. Toda mutação de saldo gera uma entrada em `audit_log`.
 - IN-04 (Devoluções): O sistema rastreia EPIs de "dupla troca" ou devolução obrigatória. A ausência de baixa do EPI antigo antes/durante a emissão de um novo gera um alerta de pendência para o colaborador e técnico responsável.
 - IN-05 (Garantia Offline e Idempotência): Retentativas do app ou duplos-cliques na interface em momento de lentidão não podem causar dupla-dedução no saldo. Operações conflitantes são isoladas e enfileiradas.
+- IN-06 (Integridade Hierárquica): É proibido o vínculo de um colaborador a uma Área ou Setor que não pertença à Unidade informada no momento do cadastro. O backend deve validar a árvore organizacional antes da persistência.
 
 # 5. Política Universal de Anexos
 - Evidências (Assinaturas digitais em base64, Fotos do EPI entregue, Documentos PDF, Comprovantes de ASO, Certificados de Treinamentos).

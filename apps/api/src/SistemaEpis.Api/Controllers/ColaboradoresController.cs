@@ -20,20 +20,50 @@ public class ColaboradoresController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateColaboradorRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(
+        [FromBody] CreateColaboradorRequest request,
+        CancellationToken cancellationToken)
     {
-        // Validações básicas de existência
-        if (!await _context.Unidades.AnyAsync(x => x.Id == request.UnidadeId, cancellationToken))
+        var unidadeExiste = await _context.Unidades
+            .AnyAsync(x => x.Id == request.UnidadeId, cancellationToken);
+
+        if (!unidadeExiste)
             return BadRequest("A unidade informada não existe.");
 
-        if (!await _context.Areas.AnyAsync(x => x.Id == request.AreaId, cancellationToken))
+        var area = await _context.Areas
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == request.AreaId, cancellationToken);
+
+        if (area is null)
             return BadRequest("A área informada não existe.");
 
-        if (!await _context.Setores.AnyAsync(x => x.Id == request.SetorId, cancellationToken))
-            return BadRequest("o setor informado não existe.");
+        if (area.UnidadeId != request.UnidadeId)
+            return BadRequest("A área informada não pertence à unidade selecionada.");
 
-        if (!await _context.Cargos.AnyAsync(x => x.Id == request.CargoId, cancellationToken))
+        var setor = await _context.Setores
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == request.SetorId, cancellationToken);
+
+        if (setor is null)
+            return BadRequest("O setor informado não existe.");
+
+        if (setor.AreaId != request.AreaId)
+            return BadRequest("O setor informado não pertence à área selecionada.");
+
+        var cargoExiste = await _context.Cargos
+            .AnyAsync(x => x.Id == request.CargoId, cancellationToken);
+
+        if (!cargoExiste)
             return BadRequest("O cargo informado não existe.");
+
+        if (request.UsuarioId.HasValue)
+        {
+            var usuarioExiste = await _context.Usuarios
+                .AnyAsync(x => x.Id == request.UsuarioId.Value, cancellationToken);
+
+            if (!usuarioExiste)
+                return BadRequest("O usuário informado não existe.");
+        }
 
         var colaborador = new Colaborador(
             request.NomeCompleto,
@@ -46,6 +76,9 @@ public class ColaboradoresController : ControllerBase
             request.CargoId
         );
 
+        if (request.UsuarioId.HasValue)
+            colaborador.VincularUsuario(request.UsuarioId.Value);
+
         _context.Colaboradores.Add(colaborador);
         await _context.SaveChangesAsync(cancellationToken);
 
@@ -55,7 +88,6 @@ public class ColaboradoresController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        // Query otimizada usando .AsNoTracking() como solicitado
         var colaboradores = await _context.Colaboradores
             .AsNoTracking()
             .Include(x => x.Unidade)
@@ -84,4 +116,29 @@ public class ColaboradoresController : ControllerBase
 
         return Ok(colaborador);
     }
+
+    [HttpPost("{id:guid}/vincular-usuario")]
+public async Task<IActionResult> VincularUsuario(
+    Guid id,
+    [FromBody] VincularUsuarioRequest request,
+    CancellationToken cancellationToken)
+{
+    var colaborador = await _context.Colaboradores
+        .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+    if (colaborador is null)
+        return NotFound("Colaborador não encontrado.");
+
+    var usuarioExiste = await _context.Usuarios
+        .AnyAsync(x => x.Id == request.UsuarioId, cancellationToken);
+
+    if (!usuarioExiste)
+        return BadRequest("Usuário informado não existe.");
+
+    colaborador.VincularUsuario(request.UsuarioId);
+
+    await _context.SaveChangesAsync(cancellationToken);
+
+    return NoContent();
+}
 }

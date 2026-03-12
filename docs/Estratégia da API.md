@@ -109,3 +109,82 @@ Utilizado para processamentos retidos no app sem internet de forma idempotente.
 ### 4. Auditoria (Recurso Admin)
 `GET /api/v1/auditoria?entidade=estoque&entidadeId={id}`
 Permitindo que telas de RH acompanhem toda mutação feita num determinado registro, lendo diretamente da tabela transversal de `audit_log` via paginação.
+
+### 5. Gestão de Colaboradores
+Endpoints focados no cadastro e vínculo de acesso.
+
+**`POST /api/v1/colaboradores`**
+Cria um novo colaborador validando a árvore organizacional (Unidade -> Área -> Setor).
+- Retorna `201 Created` em sucesso.
+- Retorna `400 Bad Request` se a hierarquia informada for inconsistente.
+
+**`POST /api/v1/colaboradores/{id}/vincular-usuario`**
+Ação específica para associar uma conta de login a um colaborador operacional.
+- Payload: `{ "usuarioId": "GUID" }`
+
+### 6. Gestão de Atributos Técnicos de EPI
+Endpoints para gerenciar características flexíveis do catálogo.
+
+**`GET /api/v1/epis/{epiId}/atributos`**
+Retorna todos os atributos técnicos vinculados a um equipamento específico.
+
+**`POST /api/v1/epis/{epiId}/atributos`**
+Cria um novo atributo técnico (Ex: COR: Azul).
+- Validação: Chave obrigatória, Valor obrigatório. A chave será normalizada para Maiúsculas.
+
+**`PUT /api/v1/epis/atributos/{id}`**
+Atualiza o valor ou a chave de um atributo existente.
+
+**`DELETE /api/v1/epis/atributos/{id}`**
+Remove um atributo técnico do catálogo do EPI.
+
+---
+
+---
+
+---
+
+## Protocolo de Validação Técnica
+
+Uma implementação profissional exige validação coerente com o domínio. Siga este protocolo para garantir que a API responda corretamente e o banco persista os dados respeitando a hierarquia operacional.
+
+### 1. Ordem de Teste (Dependência de Domínio)
+Para validar o fluxo completo de cadastros base, execute os testes obrigatoriamente nesta sequência para respeitar as chaves estrangeiras:
+1. **Unidade**: Criar a unidade operacional raiz.
+2. **Área**: Criar a área vinculada à unidade.
+3. **Setor**: Criar o setor vinculado à área.
+4. **Cargo**: Criar o cargo vinculado ao setor.
+5. **Colaborador**: Criar o colaborador vinculado ao cargo e unidade.
+
+### 2. Execução da API
+Navegue até a raiz do projeto e execute:
+```bash
+cd apps/api
+dotnet run --project src/SistemaEpis.Api
+```
+
+### 3. Validação via Swagger UI
+Acesse `http://localhost:5204/docs`:
+- Realize o login para obter o **Token JWT**.
+- Utilize o botão **Authorize** para injetar o token.
+- Execute os endpoints de `POST` seguindo a ordem descrita no item 1.
+- **Dica de Exercício**: Crie 1 Unidade, 1 Área, 2 Setores e 2 Cargos para validar a multiplicidade.
+
+### 4. Validação de Persistência (PostgreSQL)
+Confirme se os dados foram gravados corretamente e se os relacionamentos (GUIDs) estão íntegros:
+```sql
+SELECT * FROM unidades;
+SELECT * FROM areas;
+SELECT * FROM setores;
+SELECT * FROM cargos;
+SELECT * FROM colaboradores;
+```
+
+### 5. Critérios de Aceite (O que observar)
+- **Persistência**: Registros devem aparecer nas tabelas correspondentes.
+- **Integridade**: GUIDs devem ser gerados corretamente e as chaves estrangeiras devem coincidir.
+- **Status Codes**: 
+    - `201 Created` para sucesso.
+    - `400 Bad Request` para payloads inválidos ou violação de regras de negócio.
+    - `404 Not Found` para recursos inexistentes.
+

@@ -8,5 +8,6 @@ public record CreateColaboradorRequest(
     Guid UnidadeId,
     Guid AreaId,
     Guid SetorId,
-    Guid CargoId
+    Guid CargoId,
+    Guid? UsuarioId
 );

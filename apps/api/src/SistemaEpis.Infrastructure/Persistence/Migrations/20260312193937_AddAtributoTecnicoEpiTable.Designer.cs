@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SistemaEpis.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using SistemaEpis.Infrastructure.Persistence;
 namespace SistemaEpis.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260312193937_AddAtributoTecnicoEpiTable")]
+    partial class AddAtributoTecnicoEpiTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,10 +80,10 @@ namespace SistemaEpis.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EpiId", "Chave", "Valor")
+                    b.HasIndex("EpiId", "Chave")
                         .IsUnique();
 
-                    b.ToTable("atributo_tecnico_epi", (string)null);
+                    b.ToTable("epi_atributos_tecnicos", (string)null);
                 });
 
             modelBuilder.Entity("SistemaEpis.Domain.Entities.Cargo", b =>
@@ -393,7 +396,7 @@ namespace SistemaEpis.Infrastructure.Persistence.Migrations
                     b.HasOne("SistemaEpis.Domain.Entities.Epi", "Epi")
                         .WithMany("AtributosTecnicos")
                         .HasForeignKey("EpiId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Epi");

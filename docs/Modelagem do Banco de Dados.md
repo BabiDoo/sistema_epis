@@ -27,6 +27,13 @@ Tabelas desenhadas para garantir a consistência das invariantes de rastreabilid
 - `audit_log`: id, entidade (ex: "estoque"), entidade_id, acao (UPDATE, DELETE, CREATE), dados_anteriores (JSONB), dados_novos (JSONB), usuario_id, data_hr, ip.
 - `operacao_offline`: id, client_operation_id (UNIQUE UUID - chave de idempotência), tipo_operacao, payload_original (JSONB), status_processamento (PENDENTE, COMPLETADO, ERRO), data_recebimento, erro_descritivo.
 
+**5. Módulo de EPIs (Catálogo)**
+Definição do catálogo técnico de equipamentos.
+
+- `categoria_epi`: id, nome (string), descricao (string).
+- `epi`: id, categoria_epi_id, nome (string), fabricante (string), ca (string), validade_ca (date), orientacoes_uso (text), vida_util_dias (int).
+- `atributo_tecnico_epi`: id, epi_id (FK), chave (string), valor (string), data_criacao (timestamp), data_atualizacao (timestamp).
+
 ## Índices, Constraints Críticas e Integridade do Banco
 
 Para blindar as regras de negócio intrínsecas ao domínio no nível do banco de dados (impedindo anomalias de corrida ou by-pass), os seguintes artefatos devem existir fisicamente no banco relacional:
@@ -43,7 +50,11 @@ Para blindar as regras de negócio intrínsecas ao domínio no nível do banco d
 3. **Duplicidade de Cadastro de EPI (`UNIQUE CONSTRAINT`)**
    `ALTER TABLE epi ADD CONSTRAINT unq_ca_fabricante UNIQUE (ca, fabricante);`
 
-4. **Vínculo Físico Mandatório (`FOREIGN KEYS ON DELETE RESTRICT`)**
+4. **Unicidade de Atributo Técnico por EPI (`UNIQUE CONSTRAINT`)**
+   Garante que um mesmo EPI não tenha chaves duplicadas (ex: duas chaves "COR"). A normalização para UPPER CASE deve ocorrer antes da inserção.
+   `ALTER TABLE atributo_tecnico_epi ADD CONSTRAINT unq_epi_chave UNIQUE (epi_id, chave);`
+
+5. **Vínculo Físico Mandatório (`FOREIGN KEYS ON DELETE RESTRICT`)**
    Registros transacionais (Entregas e Movimentações) **jamais** podem ter chaves estrangeiras com `CASCADE`. A exclusão de um EPI ou Colaborador deve estar restrita e proibida se existirem históricos atrelados a ele.
 
 ### Estratégia de Versionamento e Migrations

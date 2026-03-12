@@ -54,3 +54,12 @@ Dentro de cada módulo, adotamos isolamento em camadas claras:
 4. Se já existir, ignora duplicidade (Idempotência).
 5. Se novo, grava registro na tabela `operacao_offline` e converte o payload para executar os casos de uso nativos (ex: Fluxo Principal de Entrega).
 6. Registra sucesso ou falha na tabela para eventual retentativa.
+
+**Fluxo de Cadastro de Colaborador:**
+1. Usuário envia os dados do colaborador (incluindo chaves para Unidade, Área, Setor e Cargo).
+2. O sistema verifica a existência de todos os recursos informados.
+3. O sistema valida se a Área informada pertence à Unidade informada.
+4. O sistema valida se o Setor informado pertence à Área informada.
+5. Se o vínculo com `UsuarioId` for fornecido, valida se o usuário existe no sistema.
+6. Se todas as invariantes de hierarquia forem satisfeitas, o registro é persistido.
+7. Em caso de falha na hierarquia, retorna `400 Bad Request` com a descrição do erro de negócio.

@@ -56,7 +56,7 @@ A estrutura abaixo reaproveita a boa prática: começar pela base técnica, depo
 **Escopo:**
 - Unidades, áreas, setores, cargos e colaboradores;
 - Perfis e usuários associados;
-- Categorias de EPI, Cadastro de EPI e atributos técnicos;
+- Categorias de EPI, Cadastro de EPI e Atributos Técnicos (Modelo Chave/Valor dinâmico com normalização);
 - Upload inicial de anexos genéricos;
 - Importação simples por Excel para dados mestres.
 

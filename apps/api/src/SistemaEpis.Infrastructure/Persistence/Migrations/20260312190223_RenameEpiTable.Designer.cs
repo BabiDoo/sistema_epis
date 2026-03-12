@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SistemaEpis.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using SistemaEpis.Infrastructure.Persistence;
 namespace SistemaEpis.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260312190223_RenameEpiTable")]
+    partial class RenameEpiTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,19 +59,16 @@ namespace SistemaEpis.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Chave")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("EpiId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Valor")
                         .IsRequired()
@@ -77,10 +77,11 @@ namespace SistemaEpis.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EpiId", "Chave", "Valor")
-                        .IsUnique();
+                    b.HasIndex("EpiId");
 
-                    b.ToTable("atributo_tecnico_epi", (string)null);
+                    b.HasIndex("Nome");
+
+                    b.ToTable("epi_atributos_tecnicos", (string)null);
                 });
 
             modelBuilder.Entity("SistemaEpis.Domain.Entities.Cargo", b =>
@@ -393,7 +394,7 @@ namespace SistemaEpis.Infrastructure.Persistence.Migrations
                     b.HasOne("SistemaEpis.Domain.Entities.Epi", "Epi")
                         .WithMany("AtributosTecnicos")
                         .HasForeignKey("EpiId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Epi");
