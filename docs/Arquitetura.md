@@ -63,3 +63,26 @@ Dentro de cada módulo, adotamos isolamento em camadas claras:
 5. Se o vínculo com `UsuarioId` for fornecido, valida se o usuário existe no sistema.
 6. Se todas as invariantes de hierarquia forem satisfeitas, o registro é persistido.
 7. Em caso de falha na hierarquia, retorna `400 Bad Request` com a descrição do erro de negócio.
+
+**Fluxo de Importação Excel (Dados Mestres):**
+1. API recebe arquivo `.xlsx` via `multipart/form-data`.
+2. Application orquestra a leitura da primeira aba através do adapter de infraestrutura.
+3. Valida cabeçalhos obrigatórios.
+4. Para cada linha:
+    - Valida dados básicos do colaborador.
+    - Resolve Unidade, Área, Setor e Cargo: busca existente por nome ou cria novo registro (Auto-provisionamento).
+    - Cria o Colaborador associado à hierarquia resolvida.
+    - **Estratégia Create Only (v1):** Se a `Matricula` já existir no sistema, a linha deve ser marcada como erro. Não haverá atualização (update) automática de registros existentes nesta fase.
+5. Devolve DTO de resumo com estatísticas e logs de erro por linha.
+**Fluxo de Upload de Anexo Genérico:**
+1. API recebe arquivo via `multipart/form-data` e metadados (`EntidadeTipo`, `EntidadeId`, `TipoAnexo`).
+2. Valida regras de negócio (tamanho, mimetypes permitidos).
+3. Salva arquivo fisicamente no storage configurado (Local V1).
+4. Persiste metadados na tabela `anexo` associando ao "dono" genérico.
+5. Retorna URL de acesso ou ID do recurso.
+
+## 5. Estratégia de Storage de Arquivos (v2)
+Para garantir agilidade no MVP sem comprometer o design final:
+- **Interface de Storage**: O domínio e a aplicação dependem de uma interface `IStorageService`.
+- **Implementação Local (V1)**: Gravação em disco no servidor com caminho relativo armazenado no banco. Facilita o desenvolvimento e validação ponta a ponta.
+- **Implementação Cloud (V2+)**: Futura implementação de `IStorageService` para Azure Blob Storage ou Amazon S3, bastando trocar a injeção de dependência na infraestrutura.

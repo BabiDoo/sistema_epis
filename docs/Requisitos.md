@@ -65,6 +65,14 @@ Módulo: Entregas (Online/Offline)
 - RF-17: Sistema valida autenticação presencial do colaborador (Assinatura, Senha ou Biometria).
 - RF-18: Sistema gera o recibo estruturado da entrega compatível com FICHA NR-6.
 
+Módulo: Integrações e Importação (Fase 2)
+- RF-19: O sistema deve permitir a importação de colaboradores via arquivo Excel (.xlsx) através de um endpoint multipart/form-data.
+- RF-20: O processo de importação deve realizar o provisionamento automático (Upsert) da estrutura organizacional (Unidade, Área, Setor e Cargo) com base nos nomes fornecidos na planilha.
+- RF-21: O sistema deve validar os cabeçalhos esperados e a integridade de cada linha antes de processar o registro.
+- RF-22: O sistema deve retornar um sumário detalhado da operação: total processado, sucesso, falhas e descrição detalhada de erros por linha.
+- RF-23: O layout esperado da planilha deve conter as colunas: `NomeCompleto`, `Matricula`, `Cpf`, `Email`, `Unidade`, `Area`, `Setor`, `Cargo`.
+- RF-24: Regras de obrigatoriedade na importação: `NomeCompleto`, `Matricula`, `Unidade`, `Area`, `Setor` e `Cargo` são campos obrigatórios. `Cpf` e `Email` são opcionais.
+
 # 4. Invariantes de Domínio (Regras Críticas de Negócio)
 Para garantir a integridade do sistema, as seguintes regras são absolutas e devem ser garantidas pelo backend:
 - IN-01 (Consistência de Saldo): Não é possível registrar uma entrega de EPI sem saldo disponível no estoque para o respectivo lote e unidade.
@@ -74,7 +82,12 @@ Para garantir a integridade do sistema, as seguintes regras são absolutas e dev
 - IN-05 (Garantia Offline e Idempotência): Retentativas do app ou duplos-cliques na interface em momento de lentidão não podem causar dupla-dedução no saldo. Operações conflitantes são isoladas e enfileiradas.
 - IN-06 (Integridade Hierárquica): É proibido o vínculo de um colaborador a uma Área ou Setor que não pertença à Unidade informada no momento do cadastro. O backend deve validar a árvore organizacional antes da persistência.
 
-# 5. Política Universal de Anexos
-- Evidências (Assinaturas digitais em base64, Fotos do EPI entregue, Documentos PDF, Comprovantes de ASO, Certificados de Treinamentos).
-- Regulamento Geral: Devem ser armazenados em object-storage apropriado (Azure Blob/S3).
-- O backend abstrai os anexos via URL e aponta o dono correspondente através de metadados genéricos (Tabela `Anexo`, discriminando via `EntidadeTipo` + `EntidadeID`), tornando o core da aplicação enxuto e flexibilizando exportação de relatórios governamentais.
+# 5. Política Universal de Anexos (v2)
+- **Conceito**: Os anexos são genéricos e não pertencem rigidamente a uma única entidade. Eles usam o padrão `EntidadeTipo` + `EntidadeId` para flexibilidade (Ex: foto de EPI, assinatura de entrega, PDF de ASO).
+- **Storage Estratégia**:
+    - **V1 (Atual)**: Armazenamento em sistema de arquivos local (pasta configurável) com persistência de metadados no banco.
+    - **Evolução**: Abstração total para migração transparente para Object Storage (Azure Blob/S3).
+- **Requisitos Técnicos**:
+    - Persistência obrigatória de: `TipoAnexo` (Enum), `UrlStorage` (Caminho relativo/URL), `NomeOriginal`, `ContentType` e `TamanhoBytes`.
+    - Rastreabilidade: Opcionalmente vinculado ao `UsuarioId` que realizou o upload.
+    - Validação: O sistema deve validar o tamanho e o tipo de arquivo antes do upload.

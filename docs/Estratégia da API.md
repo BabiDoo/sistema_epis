@@ -138,6 +138,46 @@ Atualiza o valor ou a chave de um atributo existente.
 **`DELETE /api/v1/epis/atributos/{id}`**
 Remove um atributo técnico do catálogo do EPI.
 
+### 7. Importação de Dados Mestres (Excel)
+Endpoint para carga em massa de colaboradores com provisionamento organizacional.
+
+**`POST /api/v1/integracoes/importar-colaboradores`**
+
+**Request:** `multipart/form-data`
+- `file`: Arquivo `.xlsx` (layout: `NomeCompleto`, `Matricula`, `Cpf`, `Email`, `Unidade`, `Area`, `Setor`, `Cargo`).
+
+**Regras de Negócio (v1):**
+- **Campos Obrigatórios:** `NomeCompleto`, `Matricula`, `Unidade`, `Area`, `Setor`, `Cargo`.
+- **Estratégia Create Only:** Se a `Matricula` já existir, a linha falha.
+- **Auto-provisionamento:** Cria Unidade/Área/Setor/Cargo se não existirem (busca por nome).
+
+**Response (200 OK):**
+```json
+{
+  "totalProcessado": 100,
+  "sucesso": 95,
+  "falhas": 5,
+  "detalhesErros": [
+    { "linha": 12, "erro": "Matrícula 12345 já cadastrada." },
+    { "linha": 45, "erro": "Campo 'Cargo' é obrigatório." }
+  ]
+}
+```
+
+### 8. Gestão de Anexos (v2)
+**`POST /api/v1/anexos`**
+Upload de arquivo genérico.
+- **Request (multipart/form-data):**
+  - `file`: Arquivo físico.
+  - `tipo`: Valor inteiro do `TipoAnexo`.
+  - `entidadeTipo`: Nome da entidade (Ex: "COLABORADOR", "EPI").
+  - `entidadeId`: Guid da entidade.
+- **Response (201 Created):** Retorna o objeto `Anexo` com a URL gerada.
+
+**`GET /api/v1/anexos/{entidadeTipo}/{entidadeId}`**
+Lista anexos vinculados a um registro.
+- **Response (200 OK):** Array de objetos `Anexo`.
+
 ---
 
 ---

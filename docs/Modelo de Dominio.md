@@ -56,9 +56,18 @@ Define as fronteiras entre a identidade operacional e a identidade de acesso.
 - **Colaborador (Entidade Operacional)**
   - Atributos base: `id`, `nome_completo`, `matricula`, `cpf`, `email`.
   - Invariante: Deve estar obrigatoriamente vinculado a uma `Unidade`, `Área` e `Setor` coerentes.
+  - **Regra de Importação (v1)**: Processo estritamente **Create Only**. Se a `matricula` existir, a operação é rejeitada para evitar mutações acidentais em massa.
   - Relacionamento: Possui um vínculo opcional com a entidade `Usuario` (`0:1`).
 
 - **Usuario (Identidade de Acesso)**
   - Gerencia o login e permissões do sistema.
   - Um colaborador que precisa operar o sistema (almoxarife, técnico) deve ser vinculado a um `Usuario` para herdar privilégios.
+
+## 6. Domínio: Anexos e Evidências (v2)
+- **Anexo (Agregado)**
+  - Atributos: `id`, `tipo (Enum)`, `url_storage`, `entidade_tipo`, `entidade_id`, `usuario_id`, `nome_original`, `content_type`, `tamanho_bytes`, `data_criacao`.
+  - Invariantes:
+    - O `entidade_tipo` e `entidade_id` são obrigatórios para garantir a associação genérica.
+    - O `tamanho_bytes` deve ser maior que zero.
+    - A `url_storage` guarda o caminho lógico ou físico dependendo da implementação da infraestrutura.
 

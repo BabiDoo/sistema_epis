@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<CategoriaEpi> CategoriasEpi => Set<CategoriaEpi>();
     public DbSet<Epi> Epis => Set<Epi>();
     public DbSet<AtributoTecnicoEpi> AtributosTecnicosEpi => Set<AtributoTecnicoEpi>();
+    public DbSet<Anexo> Anexos => Set<Anexo>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {

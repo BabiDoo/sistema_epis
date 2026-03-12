@@ -16,10 +16,12 @@ Separamos os metadados da entrega da rastreabilidade individual do equipamento e
 - `entrega`: id, colaborador_id, unidade_id, data_entrega, status, usuario_responsavel_id.
 - `item_entrega`: id, entrega_id, epi_id, lote_id, quantidade, data_proxima_troca (date).
 
-**3. Módulo de Anexos (Novo - Genérico)**
+**3. Módulo de Anexos (Novo - Genérico) (v2)**
 Para suporte universal a evidências e uploads de arquivos.
+- `anexo`: id (UUID), tipo (int - FK Enum), url_storage (string 500), entidade_tipo (string 80), entidade_id (UUID), usuario_id (UUID null), nome_original (string 255), content_type (string 120), tamanho_bytes (bigint), data_criacao (timestamp).
 
-- `anexo`: id, tipo (ASSINATURA, FOTO_ENTREGA, DOCUMENTO_RG, COMPROVANTE_ASO), url_storage, entidade_tipo (string discriminadora), entidade_id (UUID), usuario_id, data_criacao.
+**Enum TipoAnexo:**
+1 = Assinatura, 2 = FotoEntrega, 3 = DocumentoRg, 4 = ComprovanteAso, 5 = CertificadoTreinamento, 6 = FotoEpi, 7 = DocumentoGenerico.
 
 **4. Módulos Transversais e Offline (Novos)**
 Tabelas desenhadas para garantir a consistência das invariantes de rastreabilidade completa.
@@ -27,7 +29,16 @@ Tabelas desenhadas para garantir a consistência das invariantes de rastreabilid
 - `audit_log`: id, entidade (ex: "estoque"), entidade_id, acao (UPDATE, DELETE, CREATE), dados_anteriores (JSONB), dados_novos (JSONB), usuario_id, data_hr, ip.
 - `operacao_offline`: id, client_operation_id (UNIQUE UUID - chave de idempotência), tipo_operacao, payload_original (JSONB), status_processamento (PENDENTE, COMPLETADO, ERRO), data_recebimento, erro_descritivo.
 
-**5. Módulo de EPIs (Catálogo)**
+**5. Módulo de Organização e Colaboradores (Dados Mestres)**
+Estrutura hierárquica para suporte à gestão de EPIs por centro de custo e localidade.
+
+- `unidade`: id, nome (string), documento (string).
+- `area`: id, unidade_id (FK), nome (string).
+- `setor`: id, area_id (FK), nome (string).
+- `cargo`: id, nome (string).
+- `colaborador`: id, unidade_id (FK), area_id (FK), setor_id (FK), cargo_id (FK), nome (string), cpf (string), matricula (string), ativo (boolean).
+
+**6. Módulo de EPIs (Catálogo)**
 Definição do catálogo técnico de equipamentos.
 
 - `categoria_epi`: id, nome (string), descricao (string).
