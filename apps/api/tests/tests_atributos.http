@@ -1,0 +1,87 @@
+@baseUrl = http://localhost:5204/api/v1
+@authToken = {{login.response.body.token}}
+
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@sistemaepis.com",
+  "senha": "123456"
+}
+
+### 1. Criar novo EPI para teste de atributos
+# @name createEpi
+POST {{baseUrl}}/epis
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "nome": "Capacete de Segurança Teste Passo 6",
+  "fabricante": "3M",
+  "fotoUrl": null,
+  "ca": "11223344",
+  "validadeCa": "2028-12-31",
+  "diasDurabilidadePadrao": 365,
+  "categoriaEpiId": "a0b59f6d-4726-464f-9bd2-3b5830ee3f14" 
+}
+
+### 2. Adicionar Atributo Técnico (COR: AZUL)
+@epiId = {{createEpi.response.body.id}}
+POST {{baseUrl}}/atributos-tecnicos-epi
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "epiId": "{{epiId}}",
+  "chave": "Cor",
+  "valor": "Azul"
+}
+
+### 3. Adicionar Atributo Técnico (TAMANHO: M)
+POST {{baseUrl}}/atributos-tecnicos-epi
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "epiId": "{{epiId}}",
+  "chave": "Tamanho",
+  "valor": "M"
+}
+
+### 4. Adicionar outro VALOR para a mesma CHAVE (TAMANHO: G) - PERMITIDO PELO ÍNDICE (EpiId, Chave, Valor)
+POST {{baseUrl}}/atributos-tecnicos-epi
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "epiId": "{{epiId}}",
+  "chave": "Tamanho",
+  "valor": "G"
+}
+
+### 5. Tentar duplicidade exata (deve falhar - 400 Bad Request)
+POST {{baseUrl}}/atributos-tecnicos-epi
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "epiId": "{{epiId}}",
+  "chave": "TAMANHO",
+  "valor": "M"
+}
+
+### 6. Listar Atributos por EPI
+GET {{baseUrl}}/atributos-tecnicos-epi/por-epi/{{epiId}}
+Authorization: Bearer {{authToken}}
+
+### 7. Testar EPI inexistente (deve falhar)
+POST {{baseUrl}}/atributos-tecnicos-epi
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "epiId": "00000000-0000-0000-0000-000000000000",
+  "chave": "TESTE",
+  "valor": "VALOR"
+}

@@ -22,6 +22,10 @@ public class AreasController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateAreaRequest request, CancellationToken cancellationToken)
     {
+        var unidadeExiste = await _context.Unidades.AnyAsync(x => x.Id == request.UnidadeId, cancellationToken);
+        if (!unidadeExiste)
+            return BadRequest("A unidade informada não existe.");
+
         var area = new Area(request.Nome, request.UnidadeId);
 
         _context.Areas.Add(area);

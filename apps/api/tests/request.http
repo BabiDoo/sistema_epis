@@ -1,0 +1,516 @@
+@baseUrl = http://localhost:5204
+@contentType = application/json
+
+# =========================================================
+# COMO USAR ESTE ARQUIVO
+# 1. Suba a API
+# 2. Execute o Health
+# 3. Execute o Login
+# 4. Copie o token retornado e cole em @token
+# 5. Vá executando os blocos na ordem
+# 6. Substitua os GUIDs pelos IDs reais retornados
+# =========================================================
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYjAwOGNkOS04ZTRiLTQzYTktYmE4Yy1lYjcyYWU1NGQ1ZTAiLCJlbWFpbCI6ImFkbWluQHNpc3RlbWFlcGlzLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBZG1pbmlzdHJhZG9yIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE3NzMzNTY5NzYsImlzcyI6IlNpc3RlbWFFcGlzIiwiYXVkIjoiU2lzdGVtYUVwaXNVc2VycyJ9.7x8vdUxadwnnzh8l8vi4cthv0CeyasJCGhXNphcXAEY
+
+# IDs que você vai preencher conforme os recursos forem sendo criados
+@unidadeId = f0f388d8-e0a8-43ef-9541-f7fa4dbcac9e
+@areaId = 309d3cee-54af-464e-813d-75369a22eb15
+@setorId = a6194d97-9ebe-4e28-83a7-46424a89edb5
+@cargoId = 710a44a3-3ed7-401d-8feb-a01982747e3a
+@colaboradorId = 5fb94e4e-189b-41b1-993c-0c2b16c19a73
+@categoriaEpiId = 85d47c54-50c8-47a3-8fdb-422b68c1999d
+@epiId = 29af0551-4b4d-4e99-b0a7-0f3129deb92c
+@usuarioId = 3b008cd9-8e4b-43a9-ba8c-eb72ae54d5e0
+@anexoId = baafbd00-947a-495e-8ed7-fa5f69928a1c
+
+###
+# =========================================================
+# BLOCO 0 - HEALTH E AUTENTICAÇÃO
+# =========================================================
+
+###
+# Health Check
+GET {{baseUrl}}/health
+
+###
+# Login Admin
+# Use:
+# email: admin@sistemaepis.com
+# senha: 123456
+POST {{baseUrl}}/api/v1/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "admin@sistemaepis.com",
+  "senha": "123456"
+}
+
+###
+# =========================================================
+# BLOCO 1 - UNIDADES
+# =========================================================
+
+###
+# Criar Unidade
+POST {{baseUrl}}/api/v1/unidades
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "Matriz Belo Horizonte",
+  "codigo": "MAT-BH"
+}
+
+###
+# Listar Unidades
+GET {{baseUrl}}/api/v1/unidades
+Authorization: Bearer {{token}}
+
+###
+# Buscar Unidade por ID
+GET {{baseUrl}}/api/v1/unidades/{{unidadeId}}
+Authorization: Bearer {{token}}
+
+###
+# =========================================================
+# BLOCO 2 - ÁREAS
+# =========================================================
+
+###
+# Criar Área
+POST {{baseUrl}}/api/v1/areas
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "Operações",
+  "unidadeId": "{{unidadeId}}"
+}
+
+###
+# Listar Áreas
+GET {{baseUrl}}/api/v1/areas
+Authorization: Bearer {{token}}
+
+###
+# Buscar Área por ID
+GET {{baseUrl}}/api/v1/areas/{{areaId}}
+Authorization: Bearer {{token}}
+
+###
+# Teste inválido - Criar Área com Unidade inexistente
+POST {{baseUrl}}/api/v1/areas
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "Área Inválida",
+  "unidadeId": "11111111-1111-1111-1111-111111111111"
+}
+
+###
+# =========================================================
+# BLOCO 3 - SETORES
+# =========================================================
+
+###
+# Criar Setor
+POST {{baseUrl}}/api/v1/setores
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "Almoxarifado",
+  "areaId": "{{areaId}}"
+}
+
+###
+# Listar Setores
+GET {{baseUrl}}/api/v1/setores
+Authorization: Bearer {{token}}
+
+###
+# Buscar Setor por ID
+GET {{baseUrl}}/api/v1/setores/{{setorId}}
+Authorization: Bearer {{token}}
+
+###
+# Teste inválido - Criar Setor com Área inexistente
+POST {{baseUrl}}/api/v1/setores
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "Setor Inválido",
+  "areaId": "22222222-2222-2222-2222-222222222222"
+}
+
+###
+# =========================================================
+# BLOCO 4 - CARGOS
+# =========================================================
+
+###
+# Criar Cargo
+POST {{baseUrl}}/api/v1/cargos
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "Almoxarife",
+  "codigo": "ALMOX-01"
+}
+
+###
+# Listar Cargos
+GET {{baseUrl}}/api/v1/cargos
+Authorization: Bearer {{token}}
+
+###
+# Buscar Cargo por ID
+GET {{baseUrl}}/api/v1/cargos/{{cargoId}}
+Authorization: Bearer {{token}}
+
+###
+# =========================================================
+# BLOCO 5 - COLABORADORES
+# =========================================================
+
+###
+# Criar Colaborador
+POST {{baseUrl}}/api/v1/colaboradores
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nomeCompleto": "Barbara Dorneles Martins",
+  "matricula": "12345",
+  "cpf": "123.456.789-00",
+  "email": "barbara@empresa.com",
+  "unidadeId": "{{unidadeId}}",
+  "areaId": "{{areaId}}",
+  "setorId": "{{setorId}}",
+  "cargoId": "{{cargoId}}",
+  "usuarioId": null
+}
+
+###
+# Listar Colaboradores
+GET {{baseUrl}}/api/v1/colaboradores
+Authorization: Bearer {{token}}
+
+###
+# Buscar Colaborador por ID
+GET {{baseUrl}}/api/v1/colaboradores/{{colaboradorId}}
+Authorization: Bearer {{token}}
+
+###
+# Teste inválido - Colaborador com área incompatível
+POST {{baseUrl}}/api/v1/colaboradores
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nomeCompleto": "Colaborador Invalido",
+  "matricula": "99999",
+  "cpf": "999.999.999-99",
+  "email": "invalido@empresa.com",
+  "unidadeId": "{{unidadeId}}",
+  "areaId": "33333333-3333-3333-3333-333333333333",
+  "setorId": "{{setorId}}",
+  "cargoId": "{{cargoId}}",
+  "usuarioId": null
+}
+
+###
+# Vincular Usuário ao Colaborador
+POST {{baseUrl}}/api/v1/colaboradores/{{colaboradorId}}/vincular-usuario
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "usuarioId": "{{usuarioId}}"
+}
+
+###
+# =========================================================
+# BLOCO 6 - CATEGORIAS DE EPI
+# =========================================================
+
+###
+# Criar Categoria de EPI
+POST {{baseUrl}}/api/v1/categorias-epi
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "Proteção Auditiva",
+  "descricao": "Equipamentos para proteção contra ruído."
+}
+
+###
+# Listar Categorias de EPI
+GET {{baseUrl}}/api/v1/categorias-epi
+Authorization: Bearer {{token}}
+
+###
+# Buscar Categoria de EPI por ID
+GET {{baseUrl}}/api/v1/categorias-epi/{{categoriaEpiId}}
+Authorization: Bearer {{token}}
+
+###
+# Teste inválido - Categoria duplicada
+POST {{baseUrl}}/api/v1/categorias-epi
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "Proteção Auditiva",
+  "descricao": "Duplicada"
+}
+
+###
+# =========================================================
+# BLOCO 7 - EPIs
+# =========================================================
+
+###
+# Criar EPI
+POST {{baseUrl}}/api/v1/epis
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "Protetor Auricular de Silicone",
+  "fabricante": "3M",
+  "fotoUrl": "https://storage.empresa.com/epis/protetor-auricular.jpg",
+  "ca": "12345",
+  "validadeCa": "2027-12-31",
+  "diasDurabilidadePadrao": 180,
+  "categoriaEpiId": "{{categoriaEpiId}}"
+}
+
+###
+# Listar EPIs
+GET {{baseUrl}}/api/v1/epis
+Authorization: Bearer {{token}}
+
+###
+# Buscar EPI por ID
+GET {{baseUrl}}/api/v1/epis/{{epiId}}
+Authorization: Bearer {{token}}
+
+###
+# Atualizar EPI
+PUT {{baseUrl}}/api/v1/epis/{{epiId}}
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "Protetor Auricular de Silicone Premium",
+  "fabricante": "3M",
+  "fotoUrl": "https://storage.empresa.com/epis/protetor-auricular-premium.jpg",
+  "ca": "12345",
+  "validadeCa": "2027-12-31",
+  "diasDurabilidadePadrao": 240,
+  "categoriaEpiId": "{{categoriaEpiId}}"
+}
+
+###
+# Desativar EPI
+POST {{baseUrl}}/api/v1/epis/{{epiId}}/desativar
+Authorization: Bearer {{token}}
+
+###
+# Reativar EPI
+POST {{baseUrl}}/api/v1/epis/{{epiId}}/reativar
+Authorization: Bearer {{token}}
+
+###
+# Teste inválido - CA com letras
+POST {{baseUrl}}/api/v1/epis
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "EPI Invalido",
+  "fabricante": "Marca X",
+  "fotoUrl": null,
+  "ca": "ABC123",
+  "validadeCa": "2027-12-31",
+  "diasDurabilidadePadrao": 180,
+  "categoriaEpiId": "{{categoriaEpiId}}"
+}
+
+###
+# Teste inválido - validade CA vencida
+POST {{baseUrl}}/api/v1/epis
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "EPI CA Vencido",
+  "fabricante": "Marca X",
+  "fotoUrl": null,
+  "ca": "88888",
+  "validadeCa": "2020-01-01",
+  "diasDurabilidadePadrao": 180,
+  "categoriaEpiId": "{{categoriaEpiId}}"
+}
+
+###
+# Teste inválido - fabricante vazio
+POST {{baseUrl}}/api/v1/epis
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nome": "EPI Sem Fabricante",
+  "fabricante": "",
+  "fotoUrl": null,
+  "ca": "77777",
+  "validadeCa": "2027-12-31",
+  "diasDurabilidadePadrao": 180,
+  "categoriaEpiId": "{{categoriaEpiId}}"
+}
+
+###
+# =========================================================
+# BLOCO 8 - ATRIBUTOS TÉCNICOS DO EPI
+# =========================================================
+
+###
+# Criar Atributo Técnico - Tamanho
+POST {{baseUrl}}/api/v1/atributos-tecnicos-epi
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "epiId": "{{epiId}}",
+  "chave": "TAMANHO",
+  "valor": "M"
+}
+
+###
+# Criar Atributo Técnico - Cor
+POST {{baseUrl}}/api/v1/atributos-tecnicos-epi
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "epiId": "{{epiId}}",
+  "chave": "COR",
+  "valor": "AZUL"
+}
+
+###
+# Criar Atributo Técnico - Numeração
+POST {{baseUrl}}/api/v1/atributos-tecnicos-epi
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "epiId": "{{epiId}}",
+  "chave": "NUMERACAO",
+  "valor": "42"
+}
+
+###
+# Listar Atributos Técnicos por EPI
+GET {{baseUrl}}/api/v1/atributos-tecnicos-epi/por-epi/{{epiId}}
+Authorization: Bearer {{token}}
+
+###
+# Buscar Atributo Técnico por ID
+GET {{baseUrl}}/api/v1/atributos-tecnicos-epi/GUID_DO_ATRIBUTO
+Authorization: Bearer {{token}}
+
+###
+# Atualizar Atributo Técnico
+PUT {{baseUrl}}/api/v1/atributos-tecnicos-epi/GUID_DO_ATRIBUTO
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "chave": "COR",
+  "valor": "PRETO"
+}
+
+###
+# Excluir Atributo Técnico
+DELETE {{baseUrl}}/api/v1/atributos-tecnicos-epi/GUID_DO_ATRIBUTO
+Authorization: Bearer {{token}}
+
+###
+# Teste inválido - atributo duplicado
+POST {{baseUrl}}/api/v1/atributos-tecnicos-epi
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "epiId": "{{epiId}}",
+  "chave": "COR",
+  "valor": "AZUL"
+}
+
+###
+# =========================================================
+# BLOCO 9 - ANEXOS GENÉRICOS
+# OBS: multipart/form-data pode ser mais sensível no REST Client.
+# Se der trabalho, use Swagger ou Postman só para estes endpoints.
+# =========================================================
+
+###
+# Upload de anexo para EPI
+POST {{baseUrl}}/api/v1/anexos
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="Tipo"
+
+FotoEpi
+--MyBoundary
+Content-Disposition: form-data; name="EntidadeTipo"
+
+EPI
+--MyBoundary
+Content-Disposition: form-data; name="EntidadeId"
+
+{{epiId}}
+--MyBoundary
+Content-Disposition: form-data; name="Arquivo"; filename="foto.jpg"
+Content-Type: image/jpeg
+
+< ./foto.jpg
+--MyBoundary--
+
+###
+# Buscar anexo por ID
+GET {{baseUrl}}/api/v1/anexos/{{anexoId}}
+Authorization: Bearer {{token}}
+
+###
+# Buscar anexos por entidade
+GET {{baseUrl}}/api/v1/anexos?entidadeTipo=EPI&entidadeId={{epiId}}
+Authorization: Bearer {{token}}
+
+###
+# =========================================================
+# BLOCO 10 - IMPORTAÇÃO DE COLABORADORES POR EXCEL
+# OBS: também usa multipart/form-data
+# =========================================================
+
+###
+# Importar Colaboradores por Excel
+POST {{baseUrl}}/api/v1/importacoes/colaboradores/excel
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=ExcelBoundary
+
+--ExcelBoundary
+Content-Disposition: form-data; name="arquivo"; filename="colaboradores.xlsx"
+Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+
+< ./colaboradores.xlsx
+--ExcelBoundary--

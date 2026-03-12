@@ -13,6 +13,8 @@ Entidade raiz focada na definição do que é o equipamento de proteção.
   - Comportamentos/Regras:
     - Um EPI não pode ser cadastrado ou ativado sem um CA válido.
     - Se o CA expirar, alertas preventivos são disparados e a entrega passa a ter restrições dependendo da política da empresa.
+    - **Normalização de Atributos**: Chaves de atributos técnicos (ex: COR, TAMANHO) são sempre normalizadas para (Trim + UpperCase) para evitar duplicidade lógica (ex: "Cor" vs "COR").
+    - **Imutabilidade**: Atributos técnicos podem ser atualizados, mas a alteração da chave exige validação de unicidade no escopo do EPI.
 
 ## 2. Domínio: Estoque e Lotes
 Gerencia a quantidade física e a rastreabilidade dos ativos operacionais.
@@ -47,3 +49,25 @@ Garante a economia circular do EPI e o ciclo regulatório.
 - **Devolução / Troca**
   - Quando um item atinge a `data_proxima_troca` e um novo EPI da mesma categoria for solicitado, o sistema exige uma inspeção da obrigatoriedade de devolução (dependendo da Categoria do EPI - ex: cintos de segurança, respiradores caros).
   - Comportamento: Se a devolução é obrigatória e não ocorre no ato da troca, um `AlertaDePendencia` é anexado ao perfil do Colaborador.
+
+## 5. Domínio: Estrutura Organizacional e Pessoas
+Define as fronteiras entre a identidade operacional e a identidade de acesso.
+
+- **Colaborador (Entidade Operacional)**
+  - Atributos base: `id`, `nome_completo`, `matricula`, `cpf`, `email`.
+  - Invariante: Deve estar obrigatoriamente vinculado a uma `Unidade`, `Área` e `Setor` coerentes.
+  - **Regra de Importação (v1)**: Processo estritamente **Create Only**. Se a `matricula` existir, a operação é rejeitada para evitar mutações acidentais em massa.
+  - Relacionamento: Possui um vínculo opcional com a entidade `Usuario` (`0:1`).
+
+- **Usuario (Identidade de Acesso)**
+  - Gerencia o login e permissões do sistema.
+  - Um colaborador que precisa operar o sistema (almoxarife, técnico) deve ser vinculado a um `Usuario` para herdar privilégios.
+
+## 6. Domínio: Anexos e Evidências (v2)
+- **Anexo (Agregado)**
+  - Atributos: `id`, `tipo (Enum)`, `url_storage`, `entidade_tipo`, `entidade_id`, `usuario_id`, `nome_original`, `content_type`, `tamanho_bytes`, `data_criacao`.
+  - Invariantes:
+    - O `entidade_tipo` e `entidade_id` são obrigatórios para garantir a associação genérica.
+    - O `tamanho_bytes` deve ser maior que zero.
+    - A `url_storage` guarda o caminho lógico ou físico dependendo da implementação da infraestrutura.
+

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SistemaEpis.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using SistemaEpis.Infrastructure.Persistence;
 namespace SistemaEpis.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260312184932_AddCategoriaEpi")]
+    partial class AddCategoriaEpi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,60 +24,6 @@ namespace SistemaEpis.Infrastructure.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("SistemaEpis.Domain.Entities.Anexo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasMaxLength(120)
-                        .HasColumnType("character varying(120)");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("EntidadeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("EntidadeTipo")
-                        .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("character varying(80)");
-
-                    b.Property<string>("NomeOriginal")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<long>("TamanhoBytes")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Tipo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("UrlStorage")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<Guid?>("UsuarioId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Tipo");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.HasIndex("EntidadeTipo", "EntidadeId");
-
-                    b.ToTable("anexo", (string)null);
-                });
 
             modelBuilder.Entity("SistemaEpis.Domain.Entities.Area", b =>
                 {
@@ -110,19 +59,16 @@ namespace SistemaEpis.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Chave")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("EpiId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Valor")
                         .IsRequired()
@@ -131,10 +77,11 @@ namespace SistemaEpis.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EpiId", "Chave", "Valor")
-                        .IsUnique();
+                    b.HasIndex("EpiId");
 
-                    b.ToTable("atributo_tecnico_epi", (string)null);
+                    b.HasIndex("Nome");
+
+                    b.ToTable("epi_atributos_tecnicos", (string)null);
                 });
 
             modelBuilder.Entity("SistemaEpis.Domain.Entities.Cargo", b =>
@@ -278,13 +225,13 @@ namespace SistemaEpis.Infrastructure.Persistence.Migrations
                     b.Property<bool>("Ativo")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Ca")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
                     b.Property<Guid>("CategoriaEpiId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("CertificadoAprovacao")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -293,7 +240,6 @@ namespace SistemaEpis.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Fabricante")
-                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
 
@@ -303,14 +249,14 @@ namespace SistemaEpis.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateOnly>("ValidadeCa")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("ValidadeCA")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -318,10 +264,10 @@ namespace SistemaEpis.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("Nome");
 
-                    b.HasIndex("Ca", "Fabricante")
+                    b.HasIndex("CertificadoAprovacao", "Fabricante")
                         .IsUnique();
 
-                    b.ToTable("epi", (string)null);
+                    b.ToTable("epis", (string)null);
                 });
 
             modelBuilder.Entity("SistemaEpis.Domain.Entities.Setor", b =>
@@ -431,16 +377,6 @@ namespace SistemaEpis.Infrastructure.Persistence.Migrations
                     b.ToTable("usuarios", (string)null);
                 });
 
-            modelBuilder.Entity("SistemaEpis.Domain.Entities.Anexo", b =>
-                {
-                    b.HasOne("SistemaEpis.Domain.Entities.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Usuario");
-                });
-
             modelBuilder.Entity("SistemaEpis.Domain.Entities.Area", b =>
                 {
                     b.HasOne("SistemaEpis.Domain.Entities.Unidade", "Unidade")
@@ -455,9 +391,9 @@ namespace SistemaEpis.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("SistemaEpis.Domain.Entities.AtributoTecnicoEpi", b =>
                 {
                     b.HasOne("SistemaEpis.Domain.Entities.Epi", "Epi")
-                        .WithMany("AtributosTecnicos")
+                        .WithMany("Atributos")
                         .HasForeignKey("EpiId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Epi");
@@ -546,7 +482,7 @@ namespace SistemaEpis.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SistemaEpis.Domain.Entities.Epi", b =>
                 {
-                    b.Navigation("AtributosTecnicos");
+                    b.Navigation("Atributos");
                 });
 
             modelBuilder.Entity("SistemaEpis.Domain.Entities.Setor", b =>

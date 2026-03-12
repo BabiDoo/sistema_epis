@@ -82,7 +82,7 @@ A API principal estará disponível em `http://localhost:5204` (sujeito à confi
 
 ---
 
-## 📚 Documentação e Arquitetura
+## 📚 Documentação e Arquitetura 
 
 Este projeto foi desenhado sob forte padrão arquitetural para garantir manutenção e escalabilidade:
 
@@ -96,6 +96,8 @@ Com o projeto `SistemaEpis.Api` rodando (veja a seção acima de Como Começar),
 👉 **`http://localhost:5204/docs`**
 
 Aqui você poderá interagir com todos os endpoints mapeados, inspecionar contratos de Response/Request e validar os Schemas criados para as APIs do projeto.
+
+
 
 ---
 *Este projeto foi concebido para entregar uma solução completa de ponta-a-ponta na gestão da Segurança do Trabalho corporativa.*

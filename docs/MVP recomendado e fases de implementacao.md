@@ -56,9 +56,9 @@ A estrutura abaixo reaproveita a boa prática: começar pela base técnica, depo
 **Escopo:**
 - Unidades, áreas, setores, cargos e colaboradores;
 - Perfis e usuários associados;
-- Categorias de EPI, Cadastro de EPI e atributos técnicos;
-- Upload inicial de anexos genéricos;
-- Importação simples por Excel para dados mestres.
+- Categorias de EPI, Cadastro de EPI e Atributos Técnicos (Modelo Chave/Valor dinâmico com normalização);
+- **Upload inicial de anexos genéricos (v2)**: Implementação de storage local para metadados e arquivos (pasta no servidor).
+- Importação simples por Excel para dados mestres (Colaboradores com auto-provisionamento de unidades, áreas, setores e cargos).
 
 ### Fase 3 — Estoque e Movimentações
 **Objetivo:** Motor estrito de controle físico de EPIs (saldos, concorrência e lotes).

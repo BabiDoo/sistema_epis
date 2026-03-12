@@ -22,6 +22,10 @@ public class SetoresController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateSetorRequest request, CancellationToken cancellationToken)
     {
+        var areaExiste = await _context.Areas.AnyAsync(x => x.Id == request.AreaId, cancellationToken);
+        if (!areaExiste)
+            return BadRequest("A área informada não existe.");
+
         var setor = new Setor(request.Nome, request.AreaId);
 
         _context.Setores.Add(setor);

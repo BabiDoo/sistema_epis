@@ -16,6 +16,12 @@ public static class DependencyInjection
 
         services.AddScoped<SistemaEpis.Infrastructure.Auth.JwtTokenGenerator>();
 
+        services.AddScoped<SistemaEpis.Application.Features.Importacoes.Colaboradores.IImportadorColaboradoresExcel, 
+            SistemaEpis.Infrastructure.Integrations.Excel.ImportadorColaboradoresExcel>();
+
+        services.AddScoped<SistemaEpis.Application.Features.Anexos.IFileStorageService, 
+            SistemaEpis.Infrastructure.Storage.LocalFileStorageService>();
+
         return services;
     }
 }
