@@ -22,6 +22,19 @@ public class ColaboradoresController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateColaboradorRequest request, CancellationToken cancellationToken)
     {
+        // Validações básicas de existência
+        if (!await _context.Unidades.AnyAsync(x => x.Id == request.UnidadeId, cancellationToken))
+            return BadRequest("A unidade informada não existe.");
+
+        if (!await _context.Areas.AnyAsync(x => x.Id == request.AreaId, cancellationToken))
+            return BadRequest("A área informada não existe.");
+
+        if (!await _context.Setores.AnyAsync(x => x.Id == request.SetorId, cancellationToken))
+            return BadRequest("o setor informado não existe.");
+
+        if (!await _context.Cargos.AnyAsync(x => x.Id == request.CargoId, cancellationToken))
+            return BadRequest("O cargo informado não existe.");
+
         var colaborador = new Colaborador(
             request.NomeCompleto,
             request.Matricula,
@@ -42,8 +55,13 @@ public class ColaboradoresController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
+        // Query otimizada usando .AsNoTracking() como solicitado
         var colaboradores = await _context.Colaboradores
             .AsNoTracking()
+            .Include(x => x.Unidade)
+            .Include(x => x.Area)
+            .Include(x => x.Setor)
+            .Include(x => x.Cargo)
             .OrderBy(x => x.NomeCompleto)
             .ToListAsync(cancellationToken);
 
@@ -55,6 +73,10 @@ public class ColaboradoresController : ControllerBase
     {
         var colaborador = await _context.Colaboradores
             .AsNoTracking()
+            .Include(x => x.Unidade)
+            .Include(x => x.Area)
+            .Include(x => x.Setor)
+            .Include(x => x.Cargo)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (colaborador is null)

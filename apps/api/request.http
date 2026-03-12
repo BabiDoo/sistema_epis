@@ -30,3 +30,111 @@ Accept: application/json
 ### 5. Teste Tratamento Global de Erro
 GET {{HostAddress}}/api/v1/teste/erro
 Accept: application/json
+
+### ======================================== ###
+### FASE 2 - CADASTROS BASE ORGANIZACIONAIS ###
+### ======================================== ###
+
+### 6. Criar Unidade (Entidade Primária)
+# @name criarUnidade
+POST {{HostAddress}}/api/v1/unidades
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "nome": "Matriz Belo Horizonte",
+    "codigo": "MAT-BH"
+}
+
+### 7. Listar Unidades
+GET {{HostAddress}}/api/v1/unidades
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### --- Captura de ID da Unidade Criada ---
+@unidadeId = {{criarUnidade.response.body.$.id}}
+
+### 8. Criar Cargo (Entidade Primária)
+# @name criarCargo
+POST {{HostAddress}}/api/v1/cargos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "nome": "Analista de Sistemas",
+    "codigo": "ANA-SIS"
+}
+
+### 9. Listar Cargos
+GET {{HostAddress}}/api/v1/cargos
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### --- Captura de ID do Cargo Criado ---
+@cargoId = {{criarCargo.response.body.$.id}}
+
+### 10. Criar Área (Depende de Unidade)
+# @name criarArea
+POST {{HostAddress}}/api/v1/areas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "nome": "Tecnologia da Informação",
+    "unidadeId": "{{unidadeId}}"
+}
+
+### 11. Listar Áreas
+GET {{HostAddress}}/api/v1/areas
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### --- Captura de ID da Área Criada ---
+@areaId = {{criarArea.response.body.$.id}}
+
+### 12. Criar Setor (Depende de Área)
+# @name criarSetor
+POST {{HostAddress}}/api/v1/setores
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "nome": "Desenvolvimento Web",
+    "areaId": "{{areaId}}"
+}
+
+### 13. Listar Setores
+GET {{HostAddress}}/api/v1/setores
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### --- Captura de ID do Setor Criado ---
+@setorId = {{criarSetor.response.body.$.id}}
+
+### 14. Criar Colaborador (Ponto Crítico - Requer Lotação Completa)
+# @name criarColaborador
+POST {{HostAddress}}/api/v1/colaboradores
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "nomeCompleto": "Bárbara Dorneles Martins",
+    "matricula": "EPI-2024-001",
+    "cpf": "123.456.789-00",
+    "email": "barbara.martins@sistemaepis.com",
+    "unidadeId": "{{unidadeId}}",
+    "areaId": "{{areaId}}",
+    "setorId": "{{setorId}}",
+    "cargoId": "{{cargoId}}"
+}
+
+### 15. Listar Colaboradores (Query Otimizada com .AsNoTracking())
+GET {{HostAddress}}/api/v1/colaboradores
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### 16. Obter Colaborador por ID
+@colaboradorId = {{criarColaborador.response.body.$.id}}
+GET {{HostAddress}}/api/v1/colaboradores/{{colaboradorId}}
+Authorization: Bearer {{token}}
+Accept: application/json
