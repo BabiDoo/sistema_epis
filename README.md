@@ -82,7 +82,7 @@ A API principal estará disponível em `http://localhost:5204` (sujeito à confi
 
 ---
 
-## 📚 Documentação e Arquitetura (Aprovação de PR)
+## 📚 Documentação e Arquitetura
 
 Este projeto foi desenhado sob forte padrão arquitetural para garantir manutenção e escalabilidade:
 
